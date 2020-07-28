@@ -1,0 +1,23 @@
+[
+	{
+		"id": "2b95288c-922e-48f3-b5e9-7fac369c7638",
+		"title": "Solo Vietnam",
+		"imageUrl": "https://thejohnfox.com/wp-content/uploads/2019/09/Screen-Shot-2019-09-28-at-11.43.28-AM.png",
+		"price": "512",
+		"description": "They work directly with writers to create covers that perfectly match your style. As part of their promise to get that right."
+	},
+	{
+		"id": "6c5809a0-3792-4c0c-acc9-229d8711f7e0",
+		"title": "Scalia",
+		"imageUrl": "https://thejohnfox.com/wp-content/uploads/2019/09/Screen-Shot-2019-09-28-at-11.43.18-AM.png",
+		"price": "299",
+		"description": "Pricing and timelines are decided on an individual project basis."
+	},
+	{
+		"id": "31dbd9f1-c5ce-4556-b57c-b18a6b8d883c",
+		"title": "The Witch of Napoli",
+		"imageUrl": "https://thejohnfox.com/wp-content/uploads/2019/09/Screen-Shot-2019-09-28-at-11.50.45-AM.png",
+		"price": "528",
+		"description": "Bailey Designs Books offers minimalist cover designs that easily catch potential readers’ eyes. Perfect for targeting at YA readers or anyone that just wants to get to the meat of a good book."
+	}
+]

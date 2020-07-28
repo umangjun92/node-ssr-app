@@ -1,0 +1,31 @@
+.product-detail__main {
+    display: flex;
+    padding: 30px;
+}
+
+.product-detail__details {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-around; */
+    /* align-self: flex-start; */
+    padding: 0 30px;
+    height: max-content;
+    width: 320px;
+}
+
+.product-detail__details > * {
+    padding-bottom: 25px;
+}
+
+.product-detail__details p {
+    font-size: 20px;
+}
+
+.product-detail__details form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 80px;
+}
+
+

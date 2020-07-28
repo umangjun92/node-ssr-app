@@ -1,0 +1,58 @@
+<div class="product-card" onclick="location.href='/product/<%= prod.id %>'">
+	<h3><%= prod.title %></h3>
+	<img src="<%= prod.imageUrl %>" />
+	<h5>Rs. <%= prod.price %></h5>
+	<p><%= prod.description %></p>
+	<div style="display: flex; justify-content: space-evenly; width: 55%; align-self: center;">
+		<% if(isAdmin) { %>
+		<form action="/admin/product/<%= prod.id %>" method="GET">
+			<button class="btn btn-primary" type="submit">Edit</button>
+		</form>
+		<form action="/admin/product/delete/<%= prod.id %>" method="POST">
+			<button class="btn btn-danger" type="submit">Delete</button>
+		</form>
+		<% } else { %>
+		<form action="/add-to-cart/<%= prod.id %>" method="post" id="addCartForm_<%= prod.id %>">
+			<input hidden name="redirectTo" value="/" readonly />
+			<% if (prod.quantity > 0) { %>
+			<div class="edit-quantity">
+				<button
+					class="btn"
+					onclick="
+                        event.preventDefault();
+                        event.stopPropagation();
+                        const form = document.getElementById('addCartForm_<%= prod.id %>');
+                        form.quantity.value = +form.quantity.value - 1;
+                        form.submit()
+                    "
+				>
+					<strong>-</strong>
+				</button>
+				<input
+					style="width: 20px; text-align: center;"
+					onclick="event.stopPropagation()"
+					;
+					name="quantity"
+					value="<%= prod.quantity %>"
+					readonly
+				/>
+				<button
+					class="btn"
+					onclick="
+                        event.preventDefault();
+                        event.stopPropagation();
+                        const form = document.getElementById('addCartForm_<%= prod.id %>');
+                        form.quantity.value = +form.quantity.value + 1;
+                        form.submit()
+                    "
+				>
+					<strong>+</strong>
+				</button>
+			</div>
+			<% } else { %>
+			<button class="btn btn-success" type="submit">Add to Cart</button>
+			<% } %>
+		</form>
+		<% } %>
+	</div>
+</div>

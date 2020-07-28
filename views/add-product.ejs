@@ -1,0 +1,25 @@
+<%- include("partials/head.ejs") %>
+		<link href="/css/add-product.css" rel="stylesheet" />
+	</head>
+	<body>
+        <%- include("partials/nav.ejs") %>
+		<main>
+            <h3 class="product-form-title">Add a Product</h3>
+			<form action="<%= pageTitle === 'Add Product' ? '/admin/product' : `/admin/product/${prod.id}` %>" method="POST" class="product-form">
+				<div class="form-control">
+					<label for="title">Title<input id="title" name="title" type="text" value="<%= prod.title %>" /></label>
+                </div>
+                <div class="form-control">
+					<label for="imageUrl">Image URL<input id="imageUrl" name="imageUrl" type="text" value="<%= prod.imageUrl %>" /></label>
+                </div>
+                <div class="form-control">
+					<label for="price">Price<input id="price" name="price" type="number" value="<%= prod.price %>" /></label>
+                </div>
+                <div class="form-control">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" type="text" cols="39" rows="3" value="<%= prod.description %>"><%= prod.description %></textarea>
+				</div>
+				<button type="submit" class="btn btn-primary"><%= pageTitle %></button>
+			</form>
+		</main>
+<%- include("partials/end.ejs") %>

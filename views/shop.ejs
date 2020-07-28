@@ -1,0 +1,19 @@
+<%- include('partials/head.ejs') %>
+    <link rel="stylesheet" href="/css/products.css"/>
+	</head>
+	<body>
+        <%- include('partials/nav.ejs') %>
+		<main>
+			<h1>All Your Shoping Needs...</h1>
+			<% if (products.length > 0) {%>
+			    <div class="products-list">
+                    <% for (let prod of products) { %>
+                       <%- include("partials/product-card.ejs", {prod, isAdmin: false}) %>
+                    <% } %>
+                </div>
+            <% } else {%>
+                <h2>No Products Found</h3>
+            <% } %>
+		</main>
+<%- include('partials/end.ejs') %>
+

@@ -1,0 +1,26 @@
+<%- include('partials/head.ejs') %>
+<link rel="stylesheet" href="/css/product-details.css">
+</head>
+	<body>
+		<%- include('partials/nav.ejs') %>
+		<main>
+            <div class="product-detail__main">
+                <div class="product-detail__img-container">
+                    <img src="<%= prod.imageUrl%>" alt="">
+                </div>
+                <div class="product-detail__details">
+                    <h1><%= prod.title %></h1>
+                    <p><%= prod.description %></p>
+                    <h2>Rs. <%= prod.price %></h2>
+                    <form action="/add-to-cart/<%= prod.id %>" method="post" style="font-size: 19px" >
+                        <input hidden name="redirectTo" value="/product/<%= prod.id %>" readonly/>
+                        <label for="quantity" >
+                            Quantity
+                            <input type="number" name="quantity" id="quantity" style="width: 65px;height: 20px" value="<%= prod.quantity > 0 ? prod.quantity : null %>">
+                        </label>
+                        <button type="submit" class="btn btn-success btn-large">Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+		</main>
+<%- include('partials/end.ejs') %>
