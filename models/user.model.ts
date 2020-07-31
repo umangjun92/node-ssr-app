@@ -60,9 +60,14 @@ export class User implements UserAttributes {
 	}
 
 	async getCartWithProductDetails(): Promise<CartItem[]> {
-		const cart = this.cart ? [...this.cart] : [];
+		let cart = this.cart ? [...this.cart] : [];
 		if (cart.length > 0) {
 			const products = await Product.findAll({ _id: { $in: cart.map((item) => item.productId) } });
+			if (products.length !== cart.length) {
+				const latestProdIds = products.map((prod) => prod._id?.toHexString());
+				this.cart = this.cart.filter((item) => latestProdIds.indexOf(item.productId.toHexString()) !== -1);
+				cart = [...this.cart];
+			}
 			return products.map(({ title, _id, price, imageUrl }) => ({
 				productId: _id as ObjectId,
 				imageUrl,
