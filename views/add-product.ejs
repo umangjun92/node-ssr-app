@@ -1,11 +1,11 @@
-<%- include("partials/head.ejs") %>
+<%- include("partials/head.ejs", {pageTitle}) %>
 		<link href="/css/add-product.css" rel="stylesheet" />
 	</head>
 	<body>
-        <%- include("partials/nav.ejs") %>
+        <%- include("partials/nav.ejs", {pageTitle}) %>
 		<main>
             <h3 class="product-form-title">Add a Product</h3>
-			<form action="<%= pageTitle === 'Add Product' ? '/admin/product' : `/admin/product/${prod.id}` %>" method="POST" class="product-form">
+			<form action="<%= pageTitle === 'Add Product' ? '/admin/product' : `/admin/product/${prod._id}` %>" method="POST" class="product-form">
 				<div class="form-control">
 					<label for="title">Title<input id="title" name="title" type="text" value="<%= prod.title %>" /></label>
                 </div>

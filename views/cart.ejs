@@ -1,7 +1,7 @@
-<%- include('partials/head.ejs', {pageTitle: "Cart"}) %>
+<%- include('partials/head.ejs', {pageTitle}) %>
 	</head>
 	<body>
-		<%- include('partials/nav.ejs') %>
+		<%- include('partials/nav.ejs', {pageTitle}) %>
 		<main>
             <table>
                 <thead>
@@ -17,13 +17,14 @@
                             <td><%= item.title %></td>
                             <td><%= item.quantity %></td>
                             <td><%= item.quantity * item.price %></td>
+                            <td><form action="/cart/delete/<%= item._id %>" method="POST"><button type="submit">Delete</button></form></td>
                         </tr>
                     <% }); %>
                 </tbody>
             </table>
 
             <div>
-                Total Cart Value: <%= cartItems.reduce((x,y) => (x.quantity * x.price) + (y.quantity * y.price)) %>
+                Total Cart Value: <%= cartItems.reduce((x,y) => (x.quantity * x.price) + (y.quantity * y.price),0) %>
             </div>
 
             <form action="/checkout" method="POST"><button type="submit">Checkout</button></form>

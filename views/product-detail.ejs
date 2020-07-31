@@ -1,8 +1,8 @@
-<%- include('partials/head.ejs') %>
+<%- include('partials/head.ejs', {pageTitle}) %>
 <link rel="stylesheet" href="/css/product-details.css">
 </head>
 	<body>
-		<%- include('partials/nav.ejs') %>
+		<%- include('partials/nav.ejs', {pageTitle}) %>
 		<main>
             <div class="product-detail__main">
                 <div class="product-detail__img-container">
@@ -12,8 +12,8 @@
                     <h1><%= prod.title %></h1>
                     <p><%= prod.description %></p>
                     <h2>Rs. <%= prod.price %></h2>
-                    <form action="/add-to-cart/<%= prod.id %>" method="post" style="font-size: 19px" >
-                        <input hidden name="redirectTo" value="/product/<%= prod.id %>" readonly/>
+                    <form action="/add-to-cart/<%= prod._id %>" method="post" style="font-size: 19px" >
+                        <input hidden name="redirectTo" value="/product/<%= prod._id %>" readonly/>
                         <label for="quantity" >
                             Quantity
                             <input type="number" name="quantity" id="quantity" style="width: 65px;height: 20px" value="<%= prod.quantity > 0 ? prod.quantity : null %>">
