@@ -1,4 +1,3 @@
-import { getDB } from "../utils/db";
 import { ObjectId, FilterQuery } from "mongodb";
 
 export interface ProductAttributes {
@@ -26,30 +25,30 @@ export class Product implements ProductAttributes {
 		this.userId = userId;
 	}
 
-	async save(): Promise<ProductAttributes[]> {
-		const res = await getDB().collection("products").insertOne(this);
-		return res.ops;
-	}
+	// async save(): Promise<ProductAttributes[]> {
+	// 	const res = await getDB().collection("products").insertOne(this);
+	// 	return res.ops;
+	// }
 
-	static async findAll(query?: FilterQuery<ProductAttributes>): Promise<ProductAttributes[]> {
-		return await getDB().collection("products").find(query).toArray();
-	}
+	// static async findAll(query?: FilterQuery<ProductAttributes>): Promise<ProductAttributes[]> {
+	// 	return await getDB().collection("products").find(query).toArray();
+	// }
 
-	static async findById(id: string): Promise<ProductAttributes | null> {
-		return await getDB()
-			.collection("products")
-			.findOne({ _id: new ObjectId(id) });
-	}
+	// static async findById(id: string): Promise<ProductAttributes | null> {
+	// 	return await getDB()
+	// 		.collection("products")
+	// 		.findOne({ _id: new ObjectId(id) });
+	// }
 
-	static async update(id: string, newProd: ProductAttributes) {
-		return await getDB()
-			.collection("products")
-			.findOneAndUpdate({ _id: new ObjectId(id) }, { $set: newProd });
-	}
+	// static async update(id: string, newProd: ProductAttributes) {
+	// 	return await getDB()
+	// 		.collection("products")
+	// 		.findOneAndUpdate({ _id: new ObjectId(id) }, { $set: newProd });
+	// }
 
-	static async delete(id: string) {
-		return await getDB()
-			.collection("products")
-			.deleteOne({ _id: new ObjectId(id) });
-	}
+	// static async delete(id: string) {
+	// 	return await getDB()
+	// 		.collection("products")
+	// 		.deleteOne({ _id: new ObjectId(id) });
+	// }
 }

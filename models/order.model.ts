@@ -1,6 +1,5 @@
 import { Model, BuildOptions, Sequelize, DataTypes } from "sequelize";
 import { ObjectId } from "mongodb";
-import { getDB } from "../utils/db";
 import { CartItem } from "./cart.model";
 
 // interface OrderItem {
@@ -34,13 +33,13 @@ export class Order implements OrderAttributes {
 	}
 
 	async addOrder() {
-		return await getDB().collection("orders").insertOne(this);
+		// return await getDB().collection("orders").insertOne(this);
 	}
 
-	static async getOrdersByUserId(userId: ObjectId): Promise<OrderAttributes[]> {
-		return await getDB()
-			.collection("orders")
-			.find({ user: { _id: userId } })
-			.toArray();
-	}
+	// static async getOrdersByUserId(userId: ObjectId): Promise<OrderAttributes[]> {
+	// return await getDB()
+	// 	.collection("orders")
+	// 	.find({ user: { _id: userId } })
+	// 	.toArray();
+	// }
 }
