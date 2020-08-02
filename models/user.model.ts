@@ -1,7 +1,6 @@
 import { ObjectId, FilterQuery, UpdateQuery } from "mongodb";
 
 import { CartItem } from "./cart.model";
-import { ProductAttributes, Product } from "./product.model";
 import { OrderAttributes } from "./order.model";
 
 export interface UserAttributes {

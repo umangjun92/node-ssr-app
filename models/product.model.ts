@@ -1,54 +1,76 @@
 import { ObjectId, FilterQuery } from "mongodb";
+import { Schema, Document, Model, model } from "mongoose";
 
-export interface ProductAttributes {
-	readonly _id?: ObjectId;
+export interface IProduct {
 	title: string;
+	description?: string;
 	price: number;
-	description: string;
-	imageUrl: string;
-	userId: ObjectId;
+	imageUrl?: string;
 }
 
-export class Product implements ProductAttributes {
-	readonly _id?: ObjectId;
-	title!: string;
-	price!: number;
-	description!: string;
-	imageUrl!: string;
-	userId!: ObjectId;
+export interface IProductDocument extends IProduct, Document {}
 
-	constructor({ title, description, price, imageUrl, userId }: ProductAttributes) {
-		this.title = title;
-		this.description = description;
-		this.price = price;
-		this.imageUrl = imageUrl;
-		this.userId = userId;
-	}
+export interface IProductModel extends Model<IProductDocument> {}
 
-	// async save(): Promise<ProductAttributes[]> {
-	// 	const res = await getDB().collection("products").insertOne(this);
-	// 	return res.ops;
-	// }
+export const ProductSchema = new Schema({
+	title: { type: String, required: true },
+	description: String,
+	price: { type: Number, required: true },
+	imageUrl: String,
+	// userId: {type: String, required: true},
+});
 
-	// static async findAll(query?: FilterQuery<ProductAttributes>): Promise<ProductAttributes[]> {
-	// 	return await getDB().collection("products").find(query).toArray();
-	// }
+export const ProductModel = model<IProductDocument>("Product", ProductSchema);
 
-	// static async findById(id: string): Promise<ProductAttributes | null> {
-	// 	return await getDB()
-	// 		.collection("products")
-	// 		.findOne({ _id: new ObjectId(id) });
-	// }
+// export interface ProductAttributes {
+// 	readonly _id?: ObjectId;
+// 	title: string;
+// 	price: number;
+// 	description: string;
+// 	imageUrl: string;
+// 	userId: ObjectId;
+// }
 
-	// static async update(id: string, newProd: ProductAttributes) {
-	// 	return await getDB()
-	// 		.collection("products")
-	// 		.findOneAndUpdate({ _id: new ObjectId(id) }, { $set: newProd });
-	// }
+// export class Product implements ProductAttributes {
+// readonly _id?: ObjectId;
+// title!: string;
+// price!: number;
+// description!: string;
+// imageUrl!: string;
+// userId!: ObjectId;
 
-	// static async delete(id: string) {
-	// 	return await getDB()
-	// 		.collection("products")
-	// 		.deleteOne({ _id: new ObjectId(id) });
-	// }
-}
+// constructor({ title, description, price, imageUrl, userId }: ProductAttributes) {
+// 	this.title = title;
+// 	this.description = description;
+// 	this.price = price;
+// 	this.imageUrl = imageUrl;
+// 	this.userId = userId;
+// }
+
+// async save(): Promise<ProductAttributes[]> {
+// 	const res = await getDB().collection("products").insertOne(this);
+// 	return res.ops;
+// }
+
+// static async findAll(query?: FilterQuery<ProductAttributes>): Promise<ProductAttributes[]> {
+// 	return await getDB().collection("products").find(query).toArray();
+// }
+
+// static async findById(id: string): Promise<ProductAttributes | null> {
+// 	return await getDB()
+// 		.collection("products")
+// 		.findOne({ _id: new ObjectId(id) });
+// }
+
+// static async update(id: string, newProd: ProductAttributes) {
+// 	return await getDB()
+// 		.collection("products")
+// 		.findOneAndUpdate({ _id: new ObjectId(id) }, { $set: newProd });
+// }
+
+// static async delete(id: string) {
+// 	return await getDB()
+// 		.collection("products")
+// 		.deleteOne({ _id: new ObjectId(id) });
+// }
+// }

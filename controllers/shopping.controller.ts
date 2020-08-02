@@ -1,7 +1,6 @@
 import { RequestHandler } from "express";
 import { ExtendedRequest } from "../utils/types";
 import { Order } from "../models/order.model";
-import { Product } from "../models/product.model";
 import { get404Page } from "./errors.controller";
 import { ObjectId } from "mongodb";
 // import { CartItem } from "../models/cart.model";

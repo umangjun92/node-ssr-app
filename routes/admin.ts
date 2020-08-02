@@ -3,7 +3,6 @@ import { Router } from "express";
 import {
 	getAddProductPage,
 	postAddProduct,
-	getIndexPage,
 	getAdminProductsPage,
 	getEditProductPage,
 	editProductPage,

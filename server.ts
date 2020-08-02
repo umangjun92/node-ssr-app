@@ -21,19 +21,19 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(RootDir, "public")));
 
-app.use((req: ExtendedRequest, res, next) => {
-	// User.findById("5f21bf3ec9c929837490dd3e")
-	// 	.then((user) => {
-	// 		if (user) {
-	// 			req.user = new User(user);
-	// 			next();
-	// 		} else {
-	// 			console.error("user not found");
-	// 			next();
-	// 		}
-	// 	})
-	// 	.catch((e) => console.error(e));
-});
+// app.use((req: ExtendedRequest, res, next) => {
+// User.findById("5f21bf3ec9c929837490dd3e")
+// 	.then((user) => {
+// 		if (user) {
+// 			req.user = new User(user);
+// 			next();
+// 		} else {
+// 			console.error("user not found");
+// 			next();
+// 		}
+// 	})
+// 	.catch((e) => console.error(e));
+// });
 
 app.use("/admin", adminRouter);
 
