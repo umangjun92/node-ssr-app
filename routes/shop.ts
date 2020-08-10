@@ -9,6 +9,7 @@ import {
 	handlePost_DeleteFromCart,
 	getOrdersPage,
 } from "../controllers/shopping.controller";
+import { authMiddleware } from "../middlewares/auth.middleware";
 
 export const shopRouter = Router();
 
@@ -16,14 +17,14 @@ shopRouter.get("/", getIndexPage);
 
 shopRouter.get("/product/:id", getProductDetailsPage);
 
-shopRouter.get("/cart", getCartPage);
+shopRouter.get("/cart", authMiddleware, getCartPage);
 
-shopRouter.get("/checkout", getCheckoutPage);
+shopRouter.get("/checkout", authMiddleware, getCheckoutPage);
 
-shopRouter.post("/checkout", handlePost_Checkout);
+shopRouter.post("/checkout", authMiddleware, handlePost_Checkout);
 
-shopRouter.post("/add-to-cart/:id", handlePost_AddProductToCart);
+shopRouter.post("/add-to-cart/:id", authMiddleware, handlePost_AddProductToCart);
 
-shopRouter.post("/cart/delete/:productId", handlePost_DeleteFromCart);
+shopRouter.post("/cart/delete/:productId", authMiddleware, handlePost_DeleteFromCart);
 
-shopRouter.get("/orders", getOrdersPage);
+shopRouter.get("/orders", authMiddleware, getOrdersPage);

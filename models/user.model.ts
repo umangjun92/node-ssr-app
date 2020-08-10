@@ -39,6 +39,7 @@ async function clearCart(this: IUserDocument) {
 interface IUser {
 	name: string;
 	email: string;
+	password: string;
 	cart: CartItem[];
 	// orders: OrderAttributes[];
 }
@@ -55,6 +56,10 @@ const UserSchema = new Schema<IUserDocument>({
 		required: true,
 	},
 	email: {
+		type: String,
+		required: true,
+	},
+	password: {
 		type: String,
 		required: true,
 	},

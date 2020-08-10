@@ -8,17 +8,18 @@ import {
 	editProductPage,
 	deleteProduct,
 } from "../controllers/products.controller";
+import { authMiddleware } from "../middlewares/auth.middleware";
 
 export const adminRouter = Router({});
 
-adminRouter.get("/product", getAddProductPage);
+adminRouter.get("/product", authMiddleware, getAddProductPage);
 
-adminRouter.post("/product", postAddProduct);
+adminRouter.post("/product", authMiddleware, postAddProduct);
 
-adminRouter.get("/product/:id", getEditProductPage);
+adminRouter.get("/product/:id", authMiddleware, getEditProductPage);
 
-adminRouter.post("/product/:id", editProductPage);
+adminRouter.post("/product/:id", authMiddleware, editProductPage);
 
-adminRouter.post("/product/delete/:id", deleteProduct);
+adminRouter.post("/product/delete/:id", authMiddleware, deleteProduct);
 
-adminRouter.get("/products", getAdminProductsPage);
+adminRouter.get("/products", authMiddleware, getAdminProductsPage);

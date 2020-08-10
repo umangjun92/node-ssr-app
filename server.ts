@@ -28,14 +28,6 @@ app.use(sessionMiddleware);
 
 app.use(authRouter);
 
-app.use("/:anything", (req: ExtendedRequest, res, next) => {
-	if (req.session?.isAuth) {
-		next();
-	} else {
-		res.redirect("/login");
-	}
-});
-
 app.use(async (req: ExtendedRequest, res, next) => {
 	const user = await UserModel.findById(req.session?.user?._id);
 	if (user) {
@@ -54,10 +46,10 @@ app.use("/", get404Page);
 
 (async () => {
 	await connectToDB();
-	const user = await UserModel.findOne();
-	if (!user) {
-		UserModel.create({ name: "test", email: "test@test.com", cart: [] });
-	}
+	// const user = await UserModel.findOne();
+	// if (!user) {
+	// 	UserModel.create({ name: "test", email: "test@test.com", cart: [] });
+	// }
 	app.listen(PORT, () => {
 		console.log(`server started on localhost:${PORT}`);
 	});
