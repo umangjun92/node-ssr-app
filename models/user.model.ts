@@ -1,96 +1,85 @@
-import { ObjectId, FilterQuery, UpdateQuery } from "mongodb";
+import { Document, model, Schema } from "mongoose";
 
 import { CartItem } from "./cart.model";
 import { OrderAttributes } from "./order.model";
+import { IProductDocument, IProductModel } from "./product.model";
 
-export interface UserAttributes {
-	readonly _id: ObjectId;
+async function addToCart(this: IUserDocument, product: IProductDocument) {
+	const cartProductIndex = this.cart.findIndex((item) => item.productId.equals(product._id));
+	if (cartProductIndex === -1) {
+		this.cart.push({ productId: product._id, quantity: 1 });
+	} else {
+		this.cart[cartProductIndex].quantity = this.cart[cartProductIndex].quantity + 1;
+	}
+	return this.save();
+}
+
+async function getCart(this: IUserDocument) {
+	const userWithCart = await this.populate("cart.productId").execPopulate();
+
+	return userWithCart.cart.map(({ productId, quantity }) => {
+		const { description, id, imageUrl, price, title } = (productId as unknown) as IProductDocument;
+		return { description, productId: id, imageUrl, price, quantity, title };
+	});
+}
+
+async function deleteCartItem(this: IUserDocument, productId: string) {
+	this.cart = this.cart.filter((item) => !item.productId.equals(productId));
+	console.log("filteredc cart", this.cart);
+	return await this.save();
+	// console.log(filteredCart);
+	// return filteredCart;
+}
+
+async function clearCart(this: IUserDocument) {
+	this.cart = [];
+	return await this.save();
+}
+
+interface IUser {
 	name: string;
 	email: string;
 	cart: CartItem[];
-	orders: OrderAttributes[];
+	// orders: OrderAttributes[];
+}
+export interface IUserDocument extends IUser, Document {
+	addToCart: typeof addToCart;
+	getCart: typeof getCart;
+	deleteCartItem: typeof deleteCartItem;
+	clearCart: typeof clearCart;
 }
 
-export class User implements UserAttributes {
-	_id!: ObjectId;
-	name!: string;
-	email!: string;
-	cart: CartItem[];
-	orders: OrderAttributes[];
+const UserSchema = new Schema<IUserDocument>({
+	name: {
+		type: String,
+		required: true,
+	},
+	email: {
+		type: String,
+		required: true,
+	},
+	cart: [
+		{
+			productId: { type: Schema.Types.ObjectId, required: true, ref: "Product" },
+			quantity: { type: Number, required: true },
+		},
+	],
+});
 
-	constructor({ email, name, _id, cart, orders }: UserAttributes) {
-		this.name = name;
-		this.email = email;
-		if (_id) {
-			this._id = _id;
-		}
-		if (cart) {
-			this.cart = [...cart];
-		}
-		if (orders) {
-			this.orders = [...orders];
-		}
-	}
+UserSchema.methods.addToCart = addToCart;
+UserSchema.methods.getCart = getCart;
+UserSchema.methods.deleteCartItem = deleteCartItem;
+UserSchema.methods.clearCart = clearCart;
 
-	// async save() {
-	// 	return await getDB().collection("users").insertOne(this);
-	// }
+// export async function addToCart(this: IUserDocument, product: IProductDocument) {
+// 	const cartProductIndex = this.cart.findIndex((item) => item.productId.equals(product._id));
+// 	if (cartProductIndex !== -1) {
+// 		this.cart.push({ productId: product._id, quantity: 1 });
+// 	} else {
+// 		this.cart[cartProductIndex].quantity = this.cart[cartProductIndex].quantity + 1;
+// 	}
+// 	this.save();
+// 	// this.addToCart()
+// }
 
-	// static async findById(id: string): Promise<UserAttributes | null> {
-	// 	return await getDB()
-	// 		.collection("users")
-	// 		.findOne({ _id: new ObjectId(id) });
-	// }
-
-	// async addProductToCart(product: ProductAttributes) {
-	// 	const productId = product._id as ObjectId;
-	// 	const cartItems = [...this.cart] || [];
-	// 	const prodIndex = cartItems.findIndex((item) => item.productId.equals(productId));
-	// 	if (prodIndex === -1) {
-	// 		cartItems.push({ productId, quantity: 1 });
-	// 	} else {
-	// 		cartItems[prodIndex].quantity = cartItems[prodIndex].quantity + 1;
-	// 	}
-
-	// 	return await getDB()
-	// 		.collection("users")
-	// 		.updateOne({ _id: new ObjectId(this._id) }, { $set: { cart: cartItems } });
-	// }
-
-	// async getCartWithProductDetails(): Promise<CartItem[]> {
-	// 	let cart = this.cart ? [...this.cart] : [];
-	// 	if (cart.length > 0) {
-	// 		const products = await Product.findAll({ _id: { $in: cart.map((item) => item.productId) } });
-	// 		if (products.length !== cart.length) {
-	// 			const latestProdIds = products.map((prod) => prod._id?.toHexString());
-	// 			this.cart = this.cart.filter((item) => latestProdIds.indexOf(item.productId.toHexString()) !== -1);
-	// 			cart = [...this.cart];
-	// 		}
-	// 		return products.map(({ title, _id, price, imageUrl }) => ({
-	// 			productId: _id as ObjectId,
-	// 			imageUrl,
-	// 			price,
-	// 			title,
-	// 			quantity: cart.find((item) => item.productId.equals(_id as ObjectId))?.quantity as number,
-	// 		}));
-	// 	} else {
-	// 		return cart;
-	// 	}
-	// }
-
-	// async deleteProductFromCart(productId: string) {
-	// 	const updatedCart = this.cart?.filter((item) => item.productId.toHexString() !== productId);
-	// 	return await getDB()
-	// 		.collection("users")
-	// 		.updateOne(
-	// 			{ _id: new ObjectId(this._id) } as FilterQuery<UserAttributes>,
-	// 			{ $set: { cart: updatedCart } } as UpdateQuery<UserAttributes>
-	// 		);
-	// }
-
-	// async clearCart() {
-	// 	return await getDB()
-	// 		.collection("users")
-	// 		.updateOne({ _id: this._id }, { $set: { cart: [] } });
-	// }
-}
+export const UserModel = model<IUserDocument>("User", UserSchema);

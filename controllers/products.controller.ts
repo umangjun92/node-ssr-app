@@ -15,7 +15,7 @@ export const getAddProductPage: RequestHandler = (req, res) => {
 
 export const postAddProduct: RequestHandler = async (req: ExtendedRequest, res) => {
 	const { description, imageUrl, price, title } = req.body;
-	await ProductModel.create({ price, title, description, imageUrl });
+	await ProductModel.create({ price, title, description, imageUrl, userId: req.user._id });
 	res.redirect("/admin/products");
 	// const newProd = new Product({ description, imageUrl, price, title, userId: req.user._id });
 	// newProd.save().then(() => {
@@ -64,7 +64,8 @@ export const getProductDetailsPage: RequestHandler = async (req, res) => {
 };
 
 export const getAdminProductsPage: RequestHandler = async (req: ExtendedRequest, res) => {
-	const products = await ProductModel.find();
+	const products = await ProductModel.find({ userId: req.user._id });
+	console.log(products);
 	res.render("shop", { pageTitle: "admin-products", products, isAdmin: true });
 };
 

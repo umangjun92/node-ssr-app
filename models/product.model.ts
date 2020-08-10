@@ -1,4 +1,3 @@
-import { ObjectId, FilterQuery } from "mongodb";
 import { Schema, Document, Model, model } from "mongoose";
 
 export interface IProduct {
@@ -6,6 +5,7 @@ export interface IProduct {
 	description?: string;
 	price: number;
 	imageUrl?: string;
+	userId?: Schema.Types.ObjectId;
 }
 
 export interface IProductDocument extends IProduct, Document {}
@@ -17,7 +17,7 @@ export const ProductSchema = new Schema({
 	description: String,
 	price: { type: Number, required: true },
 	imageUrl: String,
-	// userId: {type: String, required: true},
+	userId: { type: Schema.Types.ObjectId, required: true, ref: "User" },
 });
 
 export const ProductModel = model<IProductDocument>("Product", ProductSchema);

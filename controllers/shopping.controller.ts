@@ -1,33 +1,35 @@
 import { RequestHandler } from "express";
 import { ExtendedRequest } from "../utils/types";
-import { Order } from "../models/order.model";
+import { Order, OrderModel } from "../models/order.model";
 import { get404Page } from "./errors.controller";
 import { ObjectId } from "mongodb";
+import { ProductModel } from "../models/product.model";
 // import { CartItem } from "../models/cart.model";
 
 export const handlePost_AddProductToCart: RequestHandler = async (req: ExtendedRequest, res) => {
-	// const product = await Product.findById(req.params.id);
-	// if (product) {
-	// 	req.user.addProductToCart(product).then(() => {
-	// 		res.redirect(req.body.redirectTo);
-	// 	});
-	// 	// await req.user.addProductToCart(product);
-	// 	// res.redirect(req.body.redirectTo);
-	// } else {
-	// 	get404Page(req, res, () => {});
-	// }
+	const product = await ProductModel.findById(req.params.id);
+	if (product) {
+		await req.user.addToCart(product);
+		res.redirect(req.body.redirectTo);
+	} else {
+		get404Page(req, res, () => {});
+	}
 	// const quantity = req.body.quantity || 1;
 };
 
-export const handlePost_DeleteFromCart: RequestHandler = (req: ExtendedRequest, res) => {
+export const handlePost_DeleteFromCart: RequestHandler = async (req: ExtendedRequest, res) => {
+	await req.user.deleteCartItem(req.params.productId);
+	res.redirect("/cart");
+
 	// req.user.deleteProductFromCart(req.params.productId).then(() => {
 	// 	res.redirect("/cart");
 	// });
 };
 
 export const getCartPage: RequestHandler = async (req: ExtendedRequest, res) => {
-	// const cartItems = await req.user.getCartWithProductDetails();
-	// res.render("cart.ejs", { pageTitle: "Cart", cartItems });
+	const cartItems = await req.user.getCart();
+	console.log(cartItems);
+	res.render("cart.ejs", { pageTitle: "Cart", cartItems });
 };
 
 export const getCheckoutPage: RequestHandler = (req, res) => {
@@ -36,6 +38,10 @@ export const getCheckoutPage: RequestHandler = (req, res) => {
 
 export const handlePost_Checkout: RequestHandler = async (req: ExtendedRequest, res) => {
 	const user = req.user;
+	const order = new OrderModel({ items: await user.getCart(), userId: user._id });
+	await OrderModel.createOrder(order);
+	await user.clearCart();
+	console.log("done every");
 	// const cartItems = await user.getCartWithProductDetails();
 	// const newOrder = new Order({ user: { _id: user._id }, items: cartItems });
 	// await newOrder.addOrder();
@@ -44,7 +50,7 @@ export const handlePost_Checkout: RequestHandler = async (req: ExtendedRequest, 
 };
 
 export const getOrdersPage: RequestHandler = async (req: ExtendedRequest, res) => {
-	// const orders = await Order.getOrdersByUserId(req.user._id);
-	// console.log("orders", orders);
-	// res.redirect("/");
+	const orders = await OrderModel.getOrdersByUserId(req.user._id);
+	console.log("orders", orders);
+	res.redirect("/");
 };
