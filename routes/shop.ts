@@ -14,8 +14,6 @@ export const shopRouter = Router();
 
 shopRouter.get("/", getIndexPage);
 
-shopRouter.get("/products", getProductsPage);
-
 shopRouter.get("/product/:id", getProductDetailsPage);
 
 shopRouter.get("/cart", getCartPage);

@@ -9,6 +9,8 @@ import { RootDir } from "./utils/path";
 import { get404Page } from "./controllers/errors.controller";
 import { ExtendedRequest } from "./utils/types";
 import { UserModel } from "./models/user.model";
+import { authRouter } from "./routes/auth";
+import { sessionMiddleware } from "./middlewares/session.middleware";
 // import { User } from "./models/user.model";
 
 const PORT = process.env.PORT || 3000;
@@ -22,19 +24,26 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(RootDir, "public")));
 
-app.use(async (req: ExtendedRequest, res, next) => {
-	const user = await UserModel.findById("5f2ea51a59423e4390043149");
-	try {
-		if (user) {
-			req.user = user;
-		} else {
-			console.error("user not found");
-		}
+app.use(sessionMiddleware);
+
+app.use(authRouter);
+
+app.use("/:anything", (req: ExtendedRequest, res, next) => {
+	if (req.session?.isAuth) {
 		next();
-	} catch (e) {
-		console.log(e);
-		next();
+	} else {
+		res.redirect("/login");
 	}
+});
+
+app.use(async (req: ExtendedRequest, res, next) => {
+	const user = await UserModel.findById(req.session?.user?._id);
+	if (user) {
+		req.user = user;
+	} else {
+		console.log("user not found");
+	}
+	next();
 });
 
 app.use("/admin", adminRouter);

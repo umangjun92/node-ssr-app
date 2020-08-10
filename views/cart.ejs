@@ -1,7 +1,7 @@
 <%- include('partials/head.ejs', {pageTitle}) %>
 	</head>
 	<body>
-		<%- include('partials/nav.ejs', {pageTitle}) %>
+		<%- include('partials/nav.ejs', {pageTitle, isAuth}) %>
 		<main>
             <table>
                 <thead>
@@ -26,7 +26,10 @@
             <div>
                 Total Cart Value: <%= cartItems.reduce((x,y) => (x.quantity * x.price) + (y.quantity * y.price),0) %>
             </div>
-
-            <form action="/checkout" method="POST"><button type="submit">Checkout</button></form>
+            <% if (isAuth) { %>
+                <form action="/checkout" method="POST"><button type="submit">Checkout</button></form>
+            <% } else { %>
+               <button ><a href="/login">Login to Place Order</a></button>
+            <% } %>
 		</main>
 <%- include('partials/end.ejs') %>

@@ -29,11 +29,11 @@ export const handlePost_DeleteFromCart: RequestHandler = async (req: ExtendedReq
 export const getCartPage: RequestHandler = async (req: ExtendedRequest, res) => {
 	const cartItems = await req.user.getCart();
 	console.log(cartItems);
-	res.render("cart.ejs", { pageTitle: "Cart", cartItems });
+	res.render("cart.ejs", { pageTitle: "Cart", cartItems, isAuth: req.session.isAuth });
 };
 
-export const getCheckoutPage: RequestHandler = (req, res) => {
-	res.render("checkout.ejs", { pageTitle: "Checkout" });
+export const getCheckoutPage: RequestHandler = (req: ExtendedRequest, res) => {
+	res.render("checkout.ejs", { pageTitle: "Checkout", isAuth: req.session.isAuth });
 };
 
 export const handlePost_Checkout: RequestHandler = async (req: ExtendedRequest, res) => {

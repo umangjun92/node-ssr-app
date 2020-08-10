@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
+import { MONGODB_URL } from "../config/db.config";
 
 export async function connectToDB() {
-	return await mongoose.connect("mongodb://127.0.0.1:27017/node-course?compressors=zlib&gssapiServiceName=mongodb", {
+	return await mongoose.connect(MONGODB_URL, {
 		useNewUrlParser: true,
 		useUnifiedTopology: true,
 		useFindAndModify: true,

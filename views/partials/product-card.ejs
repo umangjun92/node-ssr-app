@@ -49,9 +49,10 @@
 					<strong>+</strong>
 				</button>
 			</div>
-			<% } else { %>
+			<% } else { %> <% if (isAuth) { %>
 			<button class="btn btn-success" type="submit">Add to Cart</button>
-			<% } %>
+
+			<% } %> <% } %>
 		</form>
 		<% } %>
 	</div>

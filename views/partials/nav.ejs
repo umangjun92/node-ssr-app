@@ -6,11 +6,7 @@
 					Shop
 				</a>
 			</li>
-			<li class="main-header__item">
-				<a class="<%= pageTitle === 'Products' ? 'active' : '' %>" href="/products">
-					Products
-				</a>
-			</li>
+			<% if (isAuth) { %>
 			<li class="main-header__item">
 				<a class="<%= pageTitle === 'Cart' ? 'active' : '' %>" href="/cart">
 					Cart
@@ -26,6 +22,18 @@
 					Admin Products
 				</a>
 			</li>
+			<% } %>
+		</ul>
+		<ul class="main-header__item-list">
+			<% if (!isAuth) { %>
+			<li class="main-header__item">
+				<a class="<%= pageTitle === 'Login' ? 'active' : '' %>" href="/login">Login</a>
+			</li>
+			<% } else {%>
+			<li class="main-header__item">
+				<form action="/logout" method="post"><button type="submit">Logout</button></form>
+			</li>
+			<% } %>
 		</ul>
 	</nav>
 </header>
