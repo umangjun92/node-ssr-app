@@ -6,7 +6,8 @@
 		<main>
             <h3 class="form-title">Add a Product</h3>
 			<form action="<%= pageTitle === 'Add Product' ? '/admin/product' : `/admin/product/${prod._id}` %>" method="POST" class="form">
-				<div class="form-control">
+			    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                <div class="form-control">
 					<label for="title">Title<input id="title" name="title" type="text" value="<%= prod.title %>" /></label>
                 </div>
                 <div class="form-control">

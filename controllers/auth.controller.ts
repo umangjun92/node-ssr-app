@@ -1,8 +1,8 @@
+import bcrypt from "bcryptjs";
+
 import { ExtendedRequest } from "../utils/types";
 import { RequestHandler } from "express";
-import { parseCookie } from "../utils/parseCookie";
 import { UserModel } from "../models/user.model";
-import bcrypt from "bcryptjs";
 
 export const getLoginPage: RequestHandler = (req: ExtendedRequest, res) => {
 	res.render("login", { pageTitle: "Login", isAuth: false });

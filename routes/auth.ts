@@ -1,4 +1,5 @@
 import { Router } from "express";
+
 import { getLoginPage, postLogin, postLogout, getSignupPage, postSignup } from "../controllers/auth.controller";
 
 export const authRouter = Router({});

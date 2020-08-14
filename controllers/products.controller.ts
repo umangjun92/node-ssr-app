@@ -1,16 +1,13 @@
 import { RequestHandler } from "express";
-// import { Product } from "../models/product.model";
-// import { readFile } from "fs";
-// import { getCartItemById, getAllCartItems } from "../models/cart.model";
-import { QueryResult } from "pg";
+
 import { ExtendedRequest } from "../utils/types";
-import { Model } from "sequelize-typescript";
 import { get404Page } from "./errors.controller";
 import { ProductModel } from "../models/product.model";
+
 export const Products = [];
 
 export const getAddProductPage: RequestHandler = (req: ExtendedRequest, res) => {
-	res.render("add-product", { pageTitle: "Add Product", prod: {}, isAuth: req.session.isAuth });
+	res.render("add-product", { pageTitle: "Add Product", prod: {} });
 };
 
 export const postAddProduct: RequestHandler = async (req: ExtendedRequest, res) => {
@@ -26,7 +23,7 @@ export const postAddProduct: RequestHandler = async (req: ExtendedRequest, res) 
 export const getEditProductPage: RequestHandler = async (req: ExtendedRequest, res) => {
 	const prodId = req.params.id;
 	const prod = await ProductModel.findById(prodId);
-	res.render("add-product", { pageTitle: "Edit Product", prod, isAuth: req.session.isAuth });
+	res.render("add-product", { pageTitle: "Edit Product", prod });
 };
 
 export const editProductPage: RequestHandler = async (req: ExtendedRequest, res) => {
@@ -53,7 +50,7 @@ export const getProductDetailsPage: RequestHandler = async (req: ExtendedRequest
 		console.log(id);
 		const prod = await ProductModel.findById(id);
 		if (prod) {
-			res.render("product-detail", { pageTitle: prod.title, prod, isAuth: req.session.isAuth });
+			res.render("product-detail", { pageTitle: prod.title, prod });
 		} else {
 			get404Page(req, res, () => {});
 		}
@@ -66,12 +63,16 @@ export const getProductDetailsPage: RequestHandler = async (req: ExtendedRequest
 export const getAdminProductsPage: RequestHandler = async (req: ExtendedRequest, res) => {
 	const products = await ProductModel.find({ userId: req.user._id });
 	console.log(products);
-	res.render("shop", { pageTitle: "admin-products", products, isAdmin: true, isAuth: req.session.isAuth });
+	res.render("shop", { pageTitle: "admin-products", products, isAdmin: true });
 };
 
 export const getIndexPage: RequestHandler = async (req: ExtendedRequest, res) => {
 	const products = await ProductModel.find();
-	res.render("shop", { pageTitle: "shop", products, isAdmin: false, isAuth: req.session.isAuth });
+	res.render("shop", {
+		pageTitle: "shop",
+		products,
+		isAdmin: false,
+	});
 };
 
 export const getProductsPage: RequestHandler = (req, res) => {};

@@ -9,10 +9,12 @@
 			<button class="btn btn-primary" type="submit">Edit</button>
 		</form>
 		<form action="/admin/product/delete/<%= prod._id %>" method="POST">
+			<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
 			<button class="btn btn-danger" type="submit">Delete</button>
 		</form>
 		<% } else { %>
 		<form action="/add-to-cart/<%= prod._id %>" method="post" id="addCartForm_<%= prod._id %>">
+			<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
 			<input hidden name="redirectTo" value="/" readonly />
 			<% if (prod.quantity > 0) { %>
 			<div class="edit-quantity">

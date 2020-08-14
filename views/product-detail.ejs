@@ -13,7 +13,8 @@
                     <p><%= prod.description %></p>
                     <h2>Rs. <%= prod.price %></h2>
                     <form action="/add-to-cart/<%= prod._id %>" method="post" style="font-size: 19px" >
-                        <input hidden name="redirectTo" value="/product/<%= prod._id %>" readonly/>
+			    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                <input hidden name="redirectTo" value="/product/<%= prod._id %>" readonly/>
                         <label for="quantity" >
                             Quantity
                             <input type="number" name="quantity" id="quantity" style="width: 65px;height: 20px" value="<%= prod.quantity > 0 ? prod.quantity : null %>">

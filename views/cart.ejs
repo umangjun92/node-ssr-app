@@ -17,7 +17,10 @@
                             <td><%= item.title %></td>
                             <td><%= item.quantity %></td>
                             <td><%= item.quantity * item.price %></td>
-                            <td><form action="/cart/delete/<%= item.productId %>" method="POST"><button type="submit">Delete</button></form></td>
+                            <td><form action="/cart/delete/<%= item.productId %>" method="POST">
+			                    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                                <button type="submit">Delete</button>
+                            </form></td>
                         </tr>
                     <% }); %>
                 </tbody>
@@ -27,7 +30,10 @@
                 Total Cart Value: <%= cartItems.reduce((x,y) => (x.quantity * x.price) + (y.quantity * y.price),0) %>
             </div>
             <% if (isAuth) { %>
-                <form action="/checkout" method="POST"><button type="submit">Checkout</button></form>
+                <form action="/checkout" method="POST">
+			    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                <button type="submit">Checkout</button>
+                </form>
             <% } else { %>
                <button ><a href="/login">Login to Place Order</a></button>
             <% } %>

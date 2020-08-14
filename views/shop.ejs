@@ -2,7 +2,7 @@
     <link rel="stylesheet" href="/css/products.css"/>
 	</head>
 	<body>
-        <%- include('partials/nav.ejs', {pageTitle, isAuth}) %>
+        <%- include('partials/nav.ejs', {pageTitle, isAuth, csrfToken}) %>
 		<main>
 			<h1>All Your Shoping Needs...</h1>
 			<% if (products.length > 0) {%>

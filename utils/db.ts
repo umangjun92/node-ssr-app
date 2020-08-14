@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 import { MONGODB_URL } from "../config/db.config";
 
 export async function connectToDB() {

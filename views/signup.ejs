@@ -6,6 +6,7 @@
 		<main>
             <h3 class="form-title">Add a Product</h3>
             <form action="/signup" method="POST" class="form">
+			    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                 <div class="form-control">
 					<label for="name">name<input id="name" name="name" type="text" /></label>
                 </div>

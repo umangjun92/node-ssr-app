@@ -1,7 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import path from "path";
-
+import csurf from "csurf";
 import { connectToDB } from "./utils/db";
 import { adminRouter } from "./routes/admin";
 import { shopRouter } from "./routes/shop";
@@ -26,7 +26,8 @@ app.use(express.static(path.join(RootDir, "public")));
 
 app.use(sessionMiddleware);
 
-app.use(authRouter);
+const csrfProtection = csurf();
+app.use(csrfProtection);
 
 app.use(async (req: ExtendedRequest, res, next) => {
 	const user = await UserModel.findById(req.session?.user?._id);
@@ -38,9 +39,17 @@ app.use(async (req: ExtendedRequest, res, next) => {
 	next();
 });
 
+app.use((req: ExtendedRequest, res, next) => {
+	res.locals.isAuth = req.session.isAuth;
+	res.locals.csrfToken = req.csrfToken();
+	next();
+});
+
 app.use("/admin", adminRouter);
 
 app.use(shopRouter);
+
+app.use(authRouter);
 
 app.use("/", get404Page);
 

@@ -1,8 +1,8 @@
 import { RequestHandler } from "express";
+
 import { ExtendedRequest } from "../utils/types";
 import { Order, OrderModel } from "../models/order.model";
 import { get404Page } from "./errors.controller";
-import { ObjectId } from "mongodb";
 import { ProductModel } from "../models/product.model";
 // import { CartItem } from "../models/cart.model";
 
@@ -29,11 +29,11 @@ export const handlePost_DeleteFromCart: RequestHandler = async (req: ExtendedReq
 export const getCartPage: RequestHandler = async (req: ExtendedRequest, res) => {
 	const cartItems = await req.user.getCart();
 	console.log(cartItems);
-	res.render("cart.ejs", { pageTitle: "Cart", cartItems, isAuth: req.session.isAuth });
+	res.render("cart.ejs", { pageTitle: "Cart", cartItems });
 };
 
 export const getCheckoutPage: RequestHandler = (req: ExtendedRequest, res) => {
-	res.render("checkout.ejs", { pageTitle: "Checkout", isAuth: req.session.isAuth });
+	res.render("checkout.ejs", { pageTitle: "Checkout" });
 };
 
 export const handlePost_Checkout: RequestHandler = async (req: ExtendedRequest, res) => {
