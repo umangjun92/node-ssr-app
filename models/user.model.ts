@@ -40,6 +40,8 @@ interface IUser {
 	name: string;
 	email: string;
 	password: string;
+	resetPasswordToken?: string;
+	resetPasswordTokenExpiration?: number;
 	cart: CartItem[];
 	// orders: OrderAttributes[];
 }
@@ -63,6 +65,8 @@ const UserSchema = new Schema<IUserDocument>({
 		type: String,
 		required: true,
 	},
+	resetPasswordToken: String,
+	resetPasswordTokenExpiration: Date,
 	cart: [
 		{
 			productId: { type: Schema.Types.ObjectId, required: true, ref: "Product" },

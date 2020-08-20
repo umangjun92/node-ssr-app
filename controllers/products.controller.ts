@@ -29,14 +29,37 @@ export const getEditProductPage: RequestHandler = async (req: ExtendedRequest, r
 export const editProductPage: RequestHandler = async (req: ExtendedRequest, res) => {
 	const id = req.params.id;
 	const { title, imageUrl, price, description } = req.body;
-	await ProductModel.findByIdAndUpdate(id, { title, imageUrl, price, description }, { useFindAndModify: false });
-	res.redirect("/admin/products");
+	try {
+		const prod = await ProductModel.findOne({ _id: id, userId: req.user.id });
+		if (prod) {
+			prod.title = title;
+			prod.imageUrl = imageUrl;
+			prod.price = price;
+			prod.description = description;
+			await prod.save();
+			res.redirect("/admin/products");
+		} else {
+			res.redirect("/admin/products");
+			throw "Product doesn't exist for this user";
+		}
+	} catch (e) {
+		console.log("Error Editing Product >>> ", e);
+	}
 };
 
-export const deleteProduct: RequestHandler = async (req, res) => {
+export const deleteProduct: RequestHandler = async (req: ExtendedRequest, res) => {
 	const id = req.params.id;
-	await ProductModel.findByIdAndDelete(id);
-	res.redirect("/admin/products");
+	try {
+		const del = await ProductModel.findOneAndDelete({ _id: id, userId: req.user.id });
+		if (!del) {
+			res.redirect("/admin/products");
+			throw del;
+		} else {
+			res.redirect("/admin/products");
+		}
+	} catch (e) {
+		console.log("Error deleteing product >>> ", e);
+	}
 	// Product.delete(id)
 	// 	.then(() => {
 	// 		res.redirect("/admin/products");
@@ -62,7 +85,6 @@ export const getProductDetailsPage: RequestHandler = async (req: ExtendedRequest
 
 export const getAdminProductsPage: RequestHandler = async (req: ExtendedRequest, res) => {
 	const products = await ProductModel.find({ userId: req.user._id });
-	console.log(products);
 	res.render("shop", { pageTitle: "admin-products", products, isAdmin: true });
 };
 
