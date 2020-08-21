@@ -4,8 +4,8 @@
 	<body>
         <%- include("partials/nav.ejs", {pageTitle, isAuth}) %>
 		<main>
-            <h3 class="form-title">Add a Product</h3>
-            <form action="/signup" method="POST" class="form">
+            <h3 class="form-title">Sign up</h3>
+            <form action="/signup" method="POST" class="form" novalidate>
 			    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                 <div class="form-control">
 					<label for="name">name<input id="name" name="name" type="text" /></label>

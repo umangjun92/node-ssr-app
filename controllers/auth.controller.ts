@@ -2,10 +2,11 @@ import bcrypt from "bcryptjs";
 import { createTransport } from "nodemailer";
 import sendgridTransport from "nodemailer-sendgrid-transport";
 import crypto from "crypto";
+import { validationResult } from "express-validator";
 
 import { ExtendedRequest } from "../utils/types";
 import { RequestHandler } from "express";
-import { UserModel } from "../models/user.model";
+import { UserModel, IUserDocument } from "../models/user.model";
 
 const transporter = createTransport(
 	sendgridTransport({
@@ -20,30 +21,25 @@ export const getLoginPage: RequestHandler = (req: ExtendedRequest, res) => {
 };
 
 export const postLogin: RequestHandler = async (req: ExtendedRequest, res) => {
-	const { email, password } = req.body;
 	// res.setHeader("Set-Cookie", "isAuth=true");
 	try {
-		const user = await UserModel.findOne({ email });
-		if (user) {
-			const isPswrdCorrect = await bcrypt.compare(password, user.password);
-			if (isPswrdCorrect) {
-				req.session.isAuth = true;
-				req.session.user = user;
-				req.session.save((err) => {
-					if (err) {
-						res.redirect("/login");
-						throw err;
-					} else {
-						res.redirect("/");
-					}
-				});
-			} else {
-				res.redirect("/login");
-				throw "Incorrect Password";
-			}
+		const errors = validationResult(req);
+		if (errors.isEmpty()) {
+			const { email } = req.body;
+			const user = (await UserModel.findOne({ email })) as IUserDocument;
+			req.session.isAuth = true;
+			req.session.user = user;
+			req.session.save((err) => {
+				if (err) {
+					res.redirect("/login");
+					throw err;
+				} else {
+					res.redirect("/");
+				}
+			});
 		} else {
 			res.redirect("/login");
-			throw "User Not Found";
+			throw errors.array().map(({ msg }) => msg);
 		}
 	} catch (e) {
 		console.log("Error when Logging In >>> ", e);
@@ -55,14 +51,13 @@ export const getSignupPage: RequestHandler = (req: ExtendedRequest, res) => {
 };
 
 export const postSignup: RequestHandler = async (req: ExtendedRequest, res) => {
-	const { email, password1, password2, name } = req.body;
-	if (password1 !== password2) {
-		res.send("passwords dont match");
-	} else {
-		const user = await UserModel.findOne({ email });
-		if (user) {
-			res.send("user already exists");
+	try {
+		const errors = validationResult(req);
+		if (errors) {
+			res.redirect("/signup");
+			throw errors.array().map(({ msg }) => msg);
 		} else {
+			const { email, password1, name } = req.body;
 			const hashedPswrd = await bcrypt.hash(password1, 12);
 			await UserModel.create({ name, email, password: hashedPswrd, cart: [] });
 			res.redirect("/");
@@ -74,9 +69,11 @@ export const postSignup: RequestHandler = async (req: ExtendedRequest, res) => {
 					html: `<h1>Hi ${name},</h1><p>Welcome to the Shop. Click on the link to get started</p>`,
 				});
 			} catch (e) {
-				console.log(e);
+				console.log("Error sending welcome Email >>> ", e);
 			}
 		}
+	} catch (e) {
+		console.log("Error signing up >>> ", e);
 	}
 };
 
